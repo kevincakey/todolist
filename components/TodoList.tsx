@@ -37,26 +37,8 @@ const TodoList: React.FC = () => {
       console.error("Error adding todo:", error);
     } else {
       setTodos([...todos, ...(data || [])]);
+      fetchTodos();
       setNewTodo("");
-    }
-  };
-
-  const toggleTodo = async (id: string) => {
-    const todo = todos.find((t) => t.id === id);
-    if (todo) {
-      const { data, error } = await supabase
-        .from("todos")
-        .update({ completed: !todo.completed })
-        .eq("id", id);
-      if (error) {
-        console.error("Error updating todo:", error);
-      } else {
-        setTodos(
-          todos.map((t) =>
-            t.id === id ? { ...t, completed: !t.completed } : t
-          )
-        );
-      }
     }
   };
 
@@ -87,11 +69,9 @@ const TodoList: React.FC = () => {
       <div style={styles.listContainer}>
         {todos.map((todo) => (
           <TodoItem
-            key={todo.id}
             id={todo.id}
             title={todo.title}
             completed={todo.completed}
-            onToggle={toggleTodo}
             onDelete={deleteTodo}
           />
         ))}

@@ -6,7 +6,6 @@ interface TodoItemProps {
   id: string;
   title: string;
   completed: boolean;
-  onToggle?: (id: string) => void;
   onDelete?: (id: string) => void;
 }
 
@@ -14,25 +13,11 @@ const TodoItem: React.FC<TodoItemProps> = ({
   id,
   title,
   completed,
-  onToggle,
   onDelete,
 }) => {
   return (
     <div style={styles.todoItem}>
-      <input
-        type="checkbox"
-        checked={completed}
-        onChange={() => onToggle && onToggle(id)}
-        style={styles.checkbox}
-      />
-      <span
-        style={{
-          ...styles.title,
-          textDecoration: completed ? "line-through" : "none",
-        }}
-      >
-        {title}
-      </span>
+      {title}
       {onDelete && (
         <button onClick={() => onDelete(id)} style={styles.deleteButton}>
           Delete
