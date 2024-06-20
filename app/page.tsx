@@ -1,4 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
+import TodoItem from "../components/TodoItem";
+import TodoList from "../components/TodoList";
 import Todo from "../types";
 
 export default async function Index() {
@@ -10,12 +12,7 @@ export default async function Index() {
   return (
     <div>
       <h1>Todos List</h1>
-      {todos.map((todo: Todo) => (
-        <div key={todo.id}>
-          <h2>{todo.title}</h2>
-          <p>Status: {todo.completed ? "Completed" : "Pending"}</p>
-        </div>
-      ))}
+      <TodoList />
     </div>
   );
 }
