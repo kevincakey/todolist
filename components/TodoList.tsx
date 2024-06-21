@@ -1,17 +1,11 @@
-"use client"; // Required to use client-side hooks or interactivity
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import TodoItem from "./TodoItem";
 
-interface Todo {
-  id: string;
-  title: string;
-  completed: boolean;
-}
-
 const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
   useEffect(() => {
@@ -23,7 +17,6 @@ const TodoList: React.FC = () => {
     if (error) {
       console.error("Error fetching todos:", error);
     } else {
-      // Assuming id is a number
       setTodos((data || []).sort((a, b) => a.id - b.id));
     }
   };
@@ -37,7 +30,6 @@ const TodoList: React.FC = () => {
     if (error) {
       console.error("Error adding todo:", error);
     } else {
-      setTodos([...todos, ...(data || [])]);
       fetchTodos();
       setNewTodo("");
     }
@@ -63,7 +55,6 @@ const TodoList: React.FC = () => {
   };
 
   const editTodo = async (id: string, newTitle: string) => {
-    // Update the todo in the database
     const { data, error } = await supabase
       .from("todos")
       .update({ title: newTitle })
@@ -73,8 +64,6 @@ const TodoList: React.FC = () => {
       console.error("Error updating todo title:", error);
       return;
     }
-
-    // Update the local state to reflect the new title, preserving order
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id ? { ...todo, title: newTitle } : todo

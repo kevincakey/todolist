@@ -1,16 +1,6 @@
-"use client"; // Required to use client-side hooks or interactivity
-
+"use client";
 import React, { useState } from "react";
-import { supabase } from "../utils/supabaseClient"; // Adjust this import to match your project's structure
-
-interface TodoItemProps {
-  id: string;
-  title: string;
-  completed: boolean;
-  onToggle: (id: string) => void;
-  onEdit: (id: string, newTitle: string) => void;
-  onDelete: (id: string) => void;
-}
+import { supabase } from "../utils/supabaseClient";
 
 const TodoItem: React.FC<TodoItemProps> = ({
   id,
@@ -25,7 +15,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
   const handleEditClick = async () => {
     if (isEditing && newTitle.trim() !== "") {
-      // Save the new title to the database
       const { data, error } = await supabase
         .from("todos")
         .update({ title: newTitle })
@@ -34,13 +23,10 @@ const TodoItem: React.FC<TodoItemProps> = ({
       if (error) {
         console.error("Error updating todo title:", error);
       } else {
-        // Call onEdit prop to update the parent component state
         onEdit(id, newTitle);
-        // Exit edit mode
         setIsEditing(false);
       }
     } else {
-      // Enter edit mode
       setIsEditing(true);
     }
   };
