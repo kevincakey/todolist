@@ -41,91 +41,51 @@ const TodoItem: React.FC<TodoItemProps> = ({
   };
 
   return (
-    <div style={styles.todoItem}>
+    <div className="flex items-center justify-between p-2 border-b border-gray-300">
       <input
         type="checkbox"
         checked={completed}
         onChange={() => onToggle(id)}
-        style={styles.checkbox}
+        className="mr-2"
       />
       {isEditing ? (
         <input
           type="text"
           value={newTitle}
           onChange={handleTitleChange}
-          style={styles.inputtitle}
+          className="flex-grow mr-2 px-2 py-1 border border-gray-300 rounded text-black"
         />
       ) : (
         <span
-          style={{
-            ...styles.title,
-            textDecoration: completed ? "line-through" : "none",
-          }}
+          className={`flex-grow mr-2 px-2 py-1 ${
+            completed ? "line-through" : ""
+          }`}
         >
           {title}
         </span>
       )}
-      <button onClick={handleEditClick} style={styles.editButton}>
+      <button
+        onClick={handleEditClick}
+        className="bg-blue-500 text-white rounded px-3 py-1 mr-2 hover:bg-blue-600 transition"
+      >
         {isEditing ? "Save" : "Edit"}
       </button>
       {isEditing && (
-        <button onClick={handleCancelEdit} style={styles.cancelButton}>
+        <button
+          onClick={handleCancelEdit}
+          className="bg-gray-500 text-white rounded px-3 py-1 mr-2 hover:bg-gray-600 transition"
+        >
           Cancel
         </button>
       )}
-      <button onClick={() => onDelete(id)} style={styles.deleteButton}>
+      <button
+        onClick={() => onDelete(id)}
+        className="bg-red-500 text-white rounded px-3 py-1 hover:bg-red-600 transition"
+      >
         Delete
       </button>
     </div>
   );
-};
-
-const styles = {
-  todoItem: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "10px",
-  },
-  checkbox: {
-    marginRight: "10px",
-  },
-  inputtitle: {
-    flexGrow: 1,
-    marginRight: "10px",
-    padding: "5px",
-    color: "black",
-  },
-  title: {
-    flexGrow: 1,
-    marginRight: "10px",
-    padding: "5px",
-  },
-  editButton: {
-    backgroundColor: "blue",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    padding: "5px 10px",
-    cursor: "pointer",
-    marginRight: "10px",
-  },
-  cancelButton: {
-    backgroundColor: "gray",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    padding: "5px 10px",
-    cursor: "pointer",
-  },
-  deleteButton: {
-    backgroundColor: "red",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    padding: "5px 10px",
-    cursor: "pointer",
-  },
 };
 
 export default TodoItem;

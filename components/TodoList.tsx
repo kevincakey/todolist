@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import TodoItem from "./TodoItem";
@@ -81,23 +80,27 @@ const TodoList: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h1>To-Do List</h1>
-      <div style={styles.inputContainer}>
+    <div className="w-full max-w-md mx-auto p-5">
+      <h1 className="text-2xl font-bold mb-5">To-Do List</h1>
+      <div className="flex mb-5">
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Enter new todo"
-          style={styles.input}
+          className="flex-grow p-2 border border-gray-300 rounded mr-2"
         />
-        <button onClick={addTodo} style={styles.addButton}>
+        <button
+          onClick={addTodo}
+          className="bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600 transition"
+        >
           Add
         </button>
       </div>
-      <div style={styles.listContainer}>
+      <div className="flex flex-col gap-3">
         {todos.map((todo) => (
           <TodoItem
+            key={todo.id}
             id={todo.id}
             title={todo.title}
             completed={todo.completed}
@@ -109,39 +112,6 @@ const TodoList: React.FC = () => {
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    width: "400px",
-    margin: "auto",
-    padding: "20px",
-  },
-  inputContainer: {
-    display: "flex",
-    marginBottom: "20px",
-  },
-  input: {
-    flexGrow: 1,
-    padding: "10px",
-    borderRadius: "4px",
-    border: "1px solid #ddd",
-    marginRight: "10px",
-    color: "black",
-  },
-  addButton: {
-    backgroundColor: "green",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    padding: "10px 20px",
-    cursor: "pointer",
-  },
-  listContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
 };
 
 export default TodoList;
