@@ -2,27 +2,36 @@
 
 import React from "react";
 
-interface TodoItemProps {
-  id: string;
-  title: string;
-  completed: boolean;
-  onDelete?: (id: string) => void;
-}
-
 const TodoItem: React.FC<TodoItemProps> = ({
   id,
   title,
   completed,
+  onToggle,
+  onEdit,
   onDelete,
 }) => {
   return (
     <div style={styles.todoItem}>
-      {title}
-      {onDelete && (
-        <button onClick={() => onDelete(id)} style={styles.deleteButton}>
-          Delete
-        </button>
-      )}
+      <input
+        type="checkbox"
+        checked={completed}
+        onChange={() => onToggle(id)}
+        style={styles.checkbox}
+      />
+      <span
+        style={{
+          ...styles.title,
+          textDecoration: completed ? "line-through" : "none",
+        }}
+      >
+        {title}
+      </span>
+      <button onClick={() => onEdit(id)} style={styles.editButton}>
+        Save Edit
+      </button>
+      <button onClick={() => onDelete(id)} style={styles.deleteButton}>
+        Delete
+      </button>
     </div>
   );
 };
@@ -40,6 +49,14 @@ const styles = {
   },
   title: {
     flexGrow: 1,
+  },
+  editButton: {
+    backgroundColor: "blue",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    padding: "5px 10px",
+    cursor: "pointer",
   },
   deleteButton: {
     backgroundColor: "red",

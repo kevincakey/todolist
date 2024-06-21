@@ -42,6 +42,34 @@ const TodoList: React.FC = () => {
     }
   };
 
+  const toggleTodo = async (id: string) => {
+    const todo = todos.find((t) => t.id === id);
+    if (todo) {
+      const { data, error } = await supabase
+        .from("todos")
+        .update({ completed: !todo.completed })
+        .eq("id", id);
+      if (error) {
+        console.error("Error updating todo:", error);
+      } else {
+        setTodos(
+          todos.map((t) =>
+            t.id === id ? { ...t, completed: !t.completed } : t
+          )
+        );
+      }
+    }
+  };
+
+  const editTodo = async (id: string) => {
+    const { error } = await supabase.from("todos").update().eq("id", id);
+    if (error) {
+      console.error("Error editing todo:", error);
+    } else {
+      setTodos(todos.filter((t) => t.id !== id));
+    }
+  };
+
   const deleteTodo = async (id: string) => {
     const { error } = await supabase.from("todos").delete().eq("id", id);
     if (error) {
@@ -69,9 +97,12 @@ const TodoList: React.FC = () => {
       <div style={styles.listContainer}>
         {todos.map((todo) => (
           <TodoItem
+            key={todo.id}
             id={todo.id}
             title={todo.title}
             completed={todo.completed}
+            onToggle={toggleTodo}
+            onEdit={editTodo}
             onDelete={deleteTodo}
           />
         ))}
