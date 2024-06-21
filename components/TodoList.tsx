@@ -23,7 +23,8 @@ const TodoList: React.FC = () => {
     if (error) {
       console.error("Error fetching todos:", error);
     } else {
-      setTodos(data || []);
+      // Assuming id is a number
+      setTodos((data || []).sort((a, b) => a.id - b.id));
     }
   };
 
@@ -61,13 +62,24 @@ const TodoList: React.FC = () => {
     }
   };
 
-  const editTodo = async (id: string) => {
-    const { error } = await supabase.from("todos").update().eq("id", id);
+  const editTodo = async (id: string, newTitle: string) => {
+    // Update the todo in the database
+    const { data, error } = await supabase
+      .from("todos")
+      .update({ title: newTitle })
+      .eq("id", id);
+
     if (error) {
-      console.error("Error editing todo:", error);
-    } else {
-      setTodos(todos.filter((t) => t.id !== id));
+      console.error("Error updating todo title:", error);
+      return;
     }
+
+    // Update the local state to reflect the new title, preserving order
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, title: newTitle } : todo
+      )
+    );
   };
 
   const deleteTodo = async (id: string) => {
@@ -97,7 +109,6 @@ const TodoList: React.FC = () => {
       <div style={styles.listContainer}>
         {todos.map((todo) => (
           <TodoItem
-            key={todo.id}
             id={todo.id}
             title={todo.title}
             completed={todo.completed}
@@ -116,9 +127,6 @@ const styles = {
     width: "400px",
     margin: "auto",
     padding: "20px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
   },
   inputContainer: {
     display: "flex",
@@ -130,17 +138,20 @@ const styles = {
     borderRadius: "4px",
     border: "1px solid #ddd",
     marginRight: "10px",
+    color: "black",
   },
   addButton: {
-    padding: "10px",
-    borderRadius: "4px",
-    border: "none",
     backgroundColor: "green",
     color: "white",
+    border: "none",
+    borderRadius: "4px",
+    padding: "10px 20px",
     cursor: "pointer",
   },
   listContainer: {
-    marginTop: "20px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
   },
 };
 
