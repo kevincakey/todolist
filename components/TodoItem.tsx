@@ -2,14 +2,7 @@
 import React, { useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 
-const TodoItem: React.FC<TodoItemProps> = ({
-  id,
-  title,
-  completed,
-  onToggle,
-  onEdit,
-  onDelete,
-}) => {
+const TodoItem = ({ id, title, completed, onToggle, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 

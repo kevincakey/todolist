@@ -88,7 +88,7 @@ const TodoList: React.FC = () => {
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Enter new todo"
-          className="flex-grow p-2 border border-gray-300 rounded mr-2"
+          className="flex-grow p-2 border text-black border-gray-300 rounded mr-2"
         />
         <button
           onClick={addTodo}
