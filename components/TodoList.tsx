@@ -23,7 +23,7 @@ const TodoList: React.FC = () => {
     if (error) {
       console.error("Error fetching todos:", error);
     } else {
-      setTodos((data || []).sort((a, b) => a.id.localeCompare(b.id)));
+      setTodos((data || []).sort((a, b) => a.id - b.id));
     }
   };
 
