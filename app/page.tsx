@@ -1,7 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import TodoItem from "../components/TodoItem";
 import TodoList from "../components/TodoList";
-import Todo from "../types";
 
 export default async function Index() {
   const supabase = createClient();
