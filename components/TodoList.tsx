@@ -3,8 +3,15 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import TodoItem from "./TodoItem";
 
+// Define the type for the todo items
+interface Todo {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
 const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
 
   useEffect(() => {
@@ -16,14 +23,14 @@ const TodoList: React.FC = () => {
     if (error) {
       console.error("Error fetching todos:", error);
     } else {
-      setTodos((data || []).sort((a, b) => a.id - b.id));
+      setTodos((data || []).sort((a, b) => a.id.localeCompare(b.id)));
     }
   };
 
   const addTodo = async () => {
     if (newTodo.trim() === "") return;
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("todos")
       .insert([{ title: newTodo, completed: false }]);
     if (error) {
@@ -37,7 +44,7 @@ const TodoList: React.FC = () => {
   const toggleTodo = async (id: string) => {
     const todo = todos.find((t) => t.id === id);
     if (todo) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("todos")
         .update({ completed: !todo.completed })
         .eq("id", id);
@@ -54,7 +61,7 @@ const TodoList: React.FC = () => {
   };
 
   const editTodo = async (id: string, newTitle: string) => {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("todos")
       .update({ title: newTitle })
       .eq("id", id);

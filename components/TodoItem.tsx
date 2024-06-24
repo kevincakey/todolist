@@ -2,13 +2,30 @@
 import React, { useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 
-const TodoItem = ({ id, title, completed, onToggle, onEdit, onDelete }) => {
+// Define the props interface for TodoItem
+interface TodoItemProps {
+  id: string;
+  title: string;
+  completed: boolean;
+  onToggle: (id: string) => void;
+  onEdit: (id: string, newTitle: string) => void;
+  onDelete: (id: string) => void;
+}
+
+const TodoItem: React.FC<TodoItemProps> = ({
+  id,
+  title,
+  completed,
+  onToggle,
+  onEdit,
+  onDelete,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 
   const handleEditClick = async () => {
     if (isEditing && newTitle.trim() !== "") {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("todos")
         .update({ title: newTitle })
         .eq("id", id);
